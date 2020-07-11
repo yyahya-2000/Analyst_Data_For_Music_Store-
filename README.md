@@ -15,6 +15,7 @@ ORDER BY 3 DESC;
 
 
 # --TOP 10 track generated the most revenue, which album? which genre?
+
 WITH
  temp_table AS(
     SELECT tracks.TrackId AS 'Track_Id', tracks.Name AS 'Track_Name', 
