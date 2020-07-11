@@ -123,4 +123,4 @@ prev_year AS(
 SELECT this_year.This_Year, prev_year.Prev_Year, 
 	((this_year.Total_Sales - prev_year.Total_Sales) / prev_year.Total_Sales * 100) AS 
 	'Percent_Change' FROM this_year
-LEFT JOIN prev_year ON CAST(this_year.This_Year AS INTEGER) = CAST(prev_year.Prev_Year AS INTEGER);
+LEFT JOIN prev_year ON CAST(this_year.This_Year AS INTEGER) = CAST(prev_year.Prev_Year AS INTEGER); 
