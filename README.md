@@ -2,7 +2,7 @@
 # Objective
 You are the lead data analyst for a popular music store. Help them analyze their sales and service!
 
---Which tracks appeared in the most playlists? how many playlist did they appear in?
+#--Which tracks appeared in the most playlists? how many playlist did they appear in?
 WITH temp_table AS (
   SELECT tracks.TrackId  AS 'track_id',tracks.Name AS 'name_' 
 	FROM playlist_track
