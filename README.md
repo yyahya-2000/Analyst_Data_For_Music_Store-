@@ -2,7 +2,8 @@
 # Objective
 You are the lead data analyst for a popular music store. Help them analyze their sales and service!
 
-#--Which tracks appeared in the most playlists? how many playlist did they appear in?
+# Which tracks appeared in the most playlists? how many playlist did they appear in?
+~~~sql
 WITH temp_table AS (
   SELECT tracks.TrackId  AS 'track_id',tracks.Name AS 'name_' 
 	FROM playlist_track
@@ -12,10 +13,10 @@ SELECT temp_table.track_id , temp_table.name_,COUNT(temp_table.name_) AS
   'Number of playlists a track appears in' FROM temp_table
 GROUP BY 1
 ORDER BY 3 DESC;
+~~~
 
-
-# --TOP 10 track generated the most revenue, which album? which genre?
-
+# TOP 10 track generated the most revenue, which album? which genre?
+~~~sql
 WITH
  temp_table AS(
     SELECT tracks.TrackId AS 'Track_Id', tracks.Name AS 'Track_Name', 
@@ -37,9 +38,10 @@ WITH
  JOIN temp_sum ON temp_table.Track_Id=temp_sum.TrackId_1
  ORDER BY 5 DESC
  LIMIT 10;
+ ~~~
  
- 
- # -- Which countries have the highest sales revenue? What percent of total revenue does each country make up?
+# Which countries have the highest sales revenue? What percent of total revenue does each country make up?
+ ~~~sql
 SELECT invoices.BillingCity,SUM(invoice_items.UnitPrice) AS 'Total Country Sales', 
 	ROUND((SUM(invoice_items.UnitPrice) * 100) / (SELECT SUM(invoice_items.UnitPrice) 
 	FROM invoice_items),2) AS 'Percent of total revenue'
@@ -48,9 +50,10 @@ JOIN invoice_items ON invoice_items.InvoiceId = invoices.InvoiceId
 GROUP BY 1
 ORDER BY 3 DESC
 LIMIT 10;--it can be what ever user wants!
+~~~
 
-
-# --How many customers did each employee support, what is the average revenue for each sale, and what is their total sale?
+# How many customers did each employee support, what is the average revenue for each sale, and what is their total sale?
+~~~sql
 WITH Sum_Avg_Total AS(
 	SELECT CustomerId, SUM(Total) AS 'total_sale' 
 	FROM invoices
@@ -65,9 +68,10 @@ LEFT JOIN customers ON employees.EmployeeId = customers.SupportRepId
 LEFT JOIN Sum_Avg_Total ON Sum_Avg_Total.CustomerId = customers.CustomerId
 GROUP BY 1
 ORDER BY 6 DESC, 4 DESC;
+~~~
 
-
-# --Do longer or shorter length albums tend to generate more revenue?
+# Do longer or shorter length albums tend to generate more revenue?
+~~~sql
 WITH revenue_per_track AS(
 	SELECT tracks.TrackId, tracks.AlbumId,tracks.Milliseconds AS 'Milliseconds',
 		SUM(invoice_items.Quantity * invoice_items.UnitPrice) 'Revenue'
@@ -81,9 +85,10 @@ FROM albums
 JOIN revenue_per_track ON albums.AlbumId = revenue_per_track.AlbumId
 GROUP BY 1
 ORDER BY 4 DESC;
+~~~
 
-
-# --Is the number of times a track appear in any playlist a good indicator of sales?
+# Is the number of times a track appear in any playlist a good indicator of sales?
+~~~sql
 WITH tracks_lists AS (
 	SELECT tracks.TrackId, COUNT(playlist_track.TrackId) AS 
 		'Times_Appearing_In_Playlist', playlists.Name
@@ -102,9 +107,10 @@ GROUP BY 1
 ORDER BY 5 DESC;
 --Answer is no
 --in the table I added the name of the playlist because it will help the result to be clearer
+~~~
 
-
-# --How much revenue is generated each year, and what is its percent change from the previous year?
+# How much revenue is generated each year, and what is its percent change from the previous year?
+~~~sql
 WITH 
 this_year AS(
 	SELECT STRFTIME('%Y',InvoiceDate) AS 'This_Year', SUM(invoice_items.UnitPrice) AS
@@ -124,3 +130,4 @@ SELECT this_year.This_Year, prev_year.Prev_Year,
 	((this_year.Total_Sales - prev_year.Total_Sales) / prev_year.Total_Sales * 100) AS 
 	'Percent_Change' FROM this_year
 LEFT JOIN prev_year ON CAST(this_year.This_Year AS INTEGER) = CAST(prev_year.Prev_Year AS INTEGER); 
+~~~
